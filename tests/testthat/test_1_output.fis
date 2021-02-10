@@ -1,0 +1,46 @@
+[System]
+Name='test'
+Ninputs=2
+Noutputs=1
+Nrules=6
+Nexceptions=0
+Conjunction='min'
+MissingValues='random'
+
+[Input1]
+Active='yes'
+Name='input1'
+Range=[       0.000 ,       1.000 ]
+NMFs=2
+MF1='MF1','SemiTrapezoidalInf',[       0.000 ,       0.000 ,       1.000 ]
+MF2='MF2','SemiTrapezoidalSup',[       0.000 ,       1.000 ,       1.000 ]
+
+[Input2]
+Active='yes'
+Name='input2'
+Range=[       0.000 ,       1.000 ]
+NMFs=3
+MF1='MF1','SemiTrapezoidalInf',[       0.000 ,       0.000 ,       0.500 ]
+MF2='MF2','triangular',[       0.000 ,       0.500 ,       1.000 ]
+MF3='MF3','SemiTrapezoidalSup',[       0.500 ,       1.000 ,       1.000 ]
+
+[Output1]
+Nature='crisp'
+Defuzzification='sugeno'
+Disjunction='max'
+DefaultValue=      -1.000 
+Classif='no' 
+Active='yes'
+Name='output1'
+Range=[       0.000 ,       1.000 ]
+NMFs=0
+
+[Rules]
+1, 1,        0.150 ,
+1, 2,        0.300 ,
+1, 3,        0.450 ,
+2, 1,        0.600 ,
+2, 2,        0.750 ,
+2, 3,        1.000 ,
+
+[Exceptions]

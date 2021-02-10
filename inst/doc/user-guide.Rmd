@@ -1,0 +1,155 @@
+---
+title: "User Guide"
+subtitle: "Package FisPro `r packageVersion('FisPro')`"
+author: "Jean-Luc Lablée, Serge Guillaume"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{User Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This package is the R implementation of functions to manage a Fuzzy Inference System (FIS) provided by the open source software [FisPro](https://www.fispro.org).<br>
+**FisPro** allows to create Fuzzy Inference Systems and to use them for reasoning purposes, especially for simulating a physical or biological system.<br>
+In this brief User Guide we describe how to build and use a FIS to infer input values.<br>
+See [Fuzzy Logic Elementary Glossary](https://www.fispro.org/documentation/en/inline-help/node39.html) for more details about Fuzzy Logic.
+
+```{r, setup}
+library(FisPro)
+```
+
+## Build a FIS from a configuration file
+
+The FIS configuration file can be designed using the [FisPro](https://www.fispro.org) open source software.
+
+```{r}
+fis_file <- system.file("extdata", "test.fis", package = "FisPro")
+fis <- NewFis(fis_file)
+```
+
+## Build a FIS from scratch
+
+Create a new empty FIS.<br>
+The design must be completed using the available functions to add inputs, outputs and rules before it can be used for inference.
+
+```{r}
+fis <- NewFis()
+fis$name <- "foo"
+```
+
+### Create inputs
+
+Add 2 inputs to the FIS.
+
+Create the first input with 2 MFs regular standardized fuzzy partition:
+
+```{r}
+fisin1 <- NewFisIn(2, 0, 1)
+fisin1$name <- "input1"
+fis$add_input(fisin1)
+```
+
+Create the second input with 3 MFs:
+
+```{r}
+fisin2 <- NewFisIn(0, 1)
+fisin2$name <- "input2"
+
+mf1 <- NewMfTrapezoidalInf(0, 0.5)
+mf1$label <- "Low"
+fisin2$add_mf(mf1)
+
+mf2 <- NewMfTriangular(0, 0.5, 1)
+mf2$label <- "Average"
+fisin2$add_mf(mf2)
+
+mf3 <- NewMfTrapezoidalSup(0.5, 1)
+mf3$label <- "High"
+fisin2$add_mf(mf3)
+
+fis$add_input(fisin2)
+```
+
+### Create outputs
+
+Add 2 outputs to the FIS.
+
+Create a crisp output with range [0, 1]:
+
+```{r}
+fisout1 <- NewFisOutCrisp(0, 1)
+fisout1$name <- "output1"
+fis$add_output(fisout1)
+```
+
+Create a fuzzy output with 2 MFs regular standardized fuzzy partition in range [0, 1]:
+
+```{r}
+fisout2 <- NewFisOutFuzzy(2, 0, 1)
+fisout2$name <- "output2"
+fis$add_output(fisout2)
+```
+
+### Create the rule base
+
+Add 2 rules to the FIS.<br>
+Each rule is initialized with a vector of premises and conclusions.<br>
+- a premise is the 1-based index of MF in the input [FisIn], 0 means the rule is incompelete.<br>
+- a conclusion is a numeric value for crisp output [FisOutCrisp], or the 1-based index of MF in the fuzzy output [FisOutFuzzy].<br>
+In this example the second rule is incomplete, the second input of the FIS has no effect on this rule.
+
+```{r}
+fis$add_rule(NewRule(c(1, 2), c(0, 1)))
+fis$add_rule(NewRule(c(2, 0), c(1, 2)))
+```
+
+### Save the FIS configuration file
+
+Save the FIS to the file "foo.fis":
+
+```{r}
+fis$save("foo.fis")
+```
+
+```{r, include=FALSE}
+file.remove("foo.fis")
+```
+
+## FIS inference
+
+Infers all outputs:
+
+```{r}
+inferred <- fis$infer(c(0.25, 0.75))
+```
+
+Infers first output:
+
+```{r}
+inferred_output1 <- fis$infer_output(c(0.25, 0.75), 1)
+```
+
+Infers second output:
+
+```{r}
+inferred_output2 <- fis$infer_output(c(0.25, 0.75), 2)
+```
+
+Infers dataset:
+
+```{r}
+test_file <- system.file("extdata", "test_data.csv", package = "FisPro")
+dataset <- read.csv(test_file)
+inferred_dataset <- fis$infer(dataset)
+```

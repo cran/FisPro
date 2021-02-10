@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rm -rf  src/*.o \
+	src/base/*.o \
+	inst/lib \
+	src/libFisPro.a \
+	src/FisPro.so

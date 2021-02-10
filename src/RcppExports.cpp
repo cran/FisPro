@@ -6,10 +6,20 @@
 using namespace Rcpp;
 
 
-RcppExport SEXP _rcpp_module_boot_FisPro();
+RcppExport SEXP _rcpp_module_boot_deprecated_module();
+RcppExport SEXP _rcpp_module_boot_fis_module();
+RcppExport SEXP _rcpp_module_boot_fisin_module();
+RcppExport SEXP _rcpp_module_boot_fisout_module();
+RcppExport SEXP _rcpp_module_boot_mf_module();
+RcppExport SEXP _rcpp_module_boot_rule_module();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcpp_module_boot_FisPro", (DL_FUNC) &_rcpp_module_boot_FisPro, 0},
+    {"_rcpp_module_boot_deprecated_module", (DL_FUNC) &_rcpp_module_boot_deprecated_module, 0},
+    {"_rcpp_module_boot_fis_module", (DL_FUNC) &_rcpp_module_boot_fis_module, 0},
+    {"_rcpp_module_boot_fisin_module", (DL_FUNC) &_rcpp_module_boot_fisin_module, 0},
+    {"_rcpp_module_boot_fisout_module", (DL_FUNC) &_rcpp_module_boot_fisout_module, 0},
+    {"_rcpp_module_boot_mf_module", (DL_FUNC) &_rcpp_module_boot_mf_module, 0},
+    {"_rcpp_module_boot_rule_module", (DL_FUNC) &_rcpp_module_boot_rule_module, 0},
     {NULL, NULL, 0}
 };
 

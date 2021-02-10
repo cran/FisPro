@@ -1,0 +1,7 @@
+
+rm -rf  src/*.o \
+	src/base/*.o \
+	inst/lib \
+	src/lib*.a \
+	src/FisPro.dll
+	

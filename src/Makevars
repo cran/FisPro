@@ -1,1 +1,30 @@
 CXX_STD=CXX11
+
+INST_DIR=../inst
+INCLUDE_DIR=$(INST_DIR)/include
+LIB_DIR=$(INST_DIR)/lib$(R_ARCH)
+
+PKG_CPPFLAGS=-I. -I$(INCLUDE_DIR) -I$(INCLUDE_DIR)/base -DBOOST_NO_AUTO_PTR
+
+BASE_SOURCES=base/aggreg.cpp base/common.cpp base/defuz.cpp base/fis.cpp base/fuzzy_distance.cpp base/in.cpp base/mf.cpp base/mfdposs.cpp base/out.cpp base/pt.cpp base/rule.cpp
+WRAPPER_SOURCES=mf_wrapper.cpp fisin_wrapper.cpp fisout_wrapper.cpp fuzzy_range.cpp fuzzy_wrapper.cpp rule_wrapper.cpp fis_wrapper.cpp
+MODULE_SOURCES=mf_module.cpp fisin_module.cpp fisout_module.cpp rule_module.cpp fis_module.cpp deprecated_module.cpp
+STATIC_SOURCES=$(WRAPPER_SOURCES) $(BASE_SOURCES)
+SOURCES=RcppExports.cpp $(MODULE_SOURCES) $(STATIC_SOURCES)
+
+STATIC_OBJECTS=$(STATIC_SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.cpp=.o)
+
+STATIC_LIB=libFisPro.a
+
+all: $(SHLIB) static_lib
+
+static_lib: $(STATIC_OBJECTS)
+	@mkdir -p $(LIB_DIR)
+	@$(AR) -crs $(STATIC_LIB) $(STATIC_OBJECTS)
+	@cp $(STATIC_LIB) $(LIB_DIR)
+
+clean:
+	@rm -f $(OBJECTS) $(SHLIB) $(STATIC_LIB)
+
+.PHONY: all static_lib clean
