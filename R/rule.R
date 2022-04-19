@@ -16,7 +16,7 @@
 # abiding by the rules of distribution of free software.  You can  use,
 # modify and/ or redistribute the software under the terms of the CeCILL
 # license as circulated by CEA, CNRS and INRIA at the following URL
-# "http://www.cecill.info".
+# "https://cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -98,11 +98,3 @@ NULL
 NewRule <- function(...) {
   return(new(Rule, ...))
 }
-
-setOldClass("Rcpp_Rule")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_Rule", function(object) {
-  cat(object$to_string())
-})

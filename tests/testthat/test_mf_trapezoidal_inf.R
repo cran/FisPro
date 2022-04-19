@@ -24,5 +24,8 @@ test_that("MfTrapezoidalInf equality", {
 test_that("MfTrapezoidalInf to_string", {
   mf <- NewMfTrapezoidalInf(0, 1)
   mf$label <- "foo"
-  expect_equal(mf$to_string(), "mf_trapezoidal_inf(\"foo\", 0, 1)")
+  expected <- "mf_trapezoidal_inf(\"foo\", 0, 1)"
+  expect_equal(mf$to_string(), expected)
+  output <- capture.output(show(mf))
+  expect_equal(output, expected)
 })

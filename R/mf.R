@@ -16,7 +16,7 @@
 # abiding by the rules of distribution of free software.  You can  use,
 # modify and/ or redistribute the software under the terms of the CeCILL
 # license as circulated by CEA, CNRS and INRIA at the following URL
-# "http://www.cecill.info".
+# "https://cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -113,14 +113,6 @@ all.equal.Rcpp_MfTriangular <- function(x, y) {
   return(x$equals(y))
 }
 
-setOldClass("Rcpp_MfTriangular")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_MfTriangular", function(object) {
-  cat(object$to_string())
-})
-
 #' @description Overload of [toString] method
 #' @noRd
 #' @export
@@ -176,14 +168,6 @@ all.equal.Rcpp_MfTrapezoidalInf <- function(x, y) {
   return(x$equals(y))
 }
 
-setOldClass("Rcpp_MfTrapezoidalInf")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_MfTrapezoidalInf", function(object) {
-  cat(object$to_string())
-})
-
 #' @description Overload of [toString] method
 #' @noRd
 #' @export
@@ -238,14 +222,6 @@ NewMfTrapezoidalSup <- function(...) {
 all.equal.Rcpp_MfTrapezoidalSup <- function(x, y) {
   return(x$equals(y))
 }
-
-setOldClass("Rcpp_MfTrapezoidalSup")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_MfTrapezoidalSup", function(object) {
-  cat(object$to_string())
-})
 
 #' @description Overload of [toString] method
 #' @noRd
@@ -303,14 +279,6 @@ NewMfTrapezoidal <- function(...) {
 all.equal.Rcpp_MfTrapezoidal <- function(x, y) {
   return(x$equals(y))
 }
-
-setOldClass("Rcpp_MfTrapezoidal")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_MfTrapezoidal", function(object) {
-  cat(object$to_string())
-})
 
 #' @description Overload of [toString] method
 #' @noRd

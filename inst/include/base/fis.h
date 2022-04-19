@@ -433,6 +433,8 @@ class FISIN
   void ldLinMFs();// for OPENMP
 
    FISIN& operator=(const FISIN& x) {
+	// now handle heap objects
+	destroy();
     ValInf=x.ValInf;
     ValSup=x.ValSup;
     Nmf=x.Nmf;
@@ -441,8 +443,6 @@ class FISIN
     MaxObserve=x.MaxObserve;
     OLower=x.OLower;
     OUpper=x.OUpper;
-    // now handle heap objects
-    destroy();
     
     Fp=new MF*[Nmf];
     for (int i=0; i<Nmf; i++)

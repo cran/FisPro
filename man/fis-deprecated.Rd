@@ -11,7 +11,7 @@ The \code{fis} class is deprecated and will be removed in future version, use \l
 
 \describe{
 \item{\code{infer_output(data, output_index)}}{
-WARNING !!! the \code{output_index} is now 1-based indexed in \link{Fis}, was 0-based indexed in \link{fis-deprecated}}
+WARNING !!! the \code{output_index} is now 1-based indexed in \link{Fis}, was 0-based indexed in \link[=fis-deprecated]{fis}}
 }
 }
 

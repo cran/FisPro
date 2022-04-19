@@ -16,7 +16,7 @@
 # abiding by the rules of distribution of free software.  You can  use,
 # modify and/ or redistribute the software under the terms of the CeCILL
 # license as circulated by CEA, CNRS and INRIA at the following URL
-# "http://www.cecill.info".
+# "https://cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -241,11 +241,3 @@ NewFis <- function(...) {
 all.equal.Rcpp_Fis <- function(x, y) {
   return(x$equals(y))
 }
-
-setOldClass("Rcpp_Fis")
-
-#' @description Overload of [show] method
-#' @noRd
-setMethod("show", "Rcpp_Fis", function(object) {
-  cat(object$to_string())
-})

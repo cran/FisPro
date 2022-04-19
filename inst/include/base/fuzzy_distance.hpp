@@ -15,7 +15,7 @@
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
- * "http://www.cecill.info".
+ * "https://cecill.info".
  *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
@@ -39,14 +39,15 @@
 #ifndef H3F5F7B47_E372_420E_A4B9_1CA9E9FDF92D
 #define H3F5F7B47_E372_420E_A4B9_1CA9E9FDF92D
 
-#include <functional>
 #include <base/fis.h>
 
 namespace fispro {
 
-class fuzzy_distance : public std::binary_function<double, double, double> {
+class fuzzy_distance {
 
 public:
+	typedef double result_type;
+
 	fuzzy_distance(const FISIN &fisin);
 
 	bool operator==(const fuzzy_distance &other) const;

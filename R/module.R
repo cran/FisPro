@@ -16,7 +16,7 @@
 # abiding by the rules of distribution of free software.  You can  use,
 # modify and/ or redistribute the software under the terms of the CeCILL
 # license as circulated by CEA, CNRS and INRIA at the following URL
-# "http://www.cecill.info".
+# "https://cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -45,3 +45,60 @@ loadModule("fisout_module", TRUE)
 loadModule("rule_module", TRUE)
 loadModule("fis_module", TRUE)
 loadModule("deprecated_module", TRUE)
+
+evalqOnLoad({
+
+  #' @description Fis overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_Fis", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description FisIn overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_FisIn", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description FisOutCrisp overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_FisOutCrisp", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description FisOutFuzzy overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_FisOutFuzzy", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description MfTriangular overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_MfTriangular", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description MfTrapezoidalInf overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_MfTrapezoidalInf", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description MfTrapezoidalSup overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_MfTrapezoidalSup", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description MfTrapezoidal overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_MfTrapezoidal", function(object) {
+    cat(object$to_string())
+  })
+
+  #' @description Rule overload of [show] method
+  #' @noRd
+  setMethod("show", "Rcpp_Rule", function(object) {
+    cat(object$to_string())
+  })
+})

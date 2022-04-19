@@ -46,12 +46,12 @@
 #' Help pages for deprecated functions are available at `help("<class>-deprecated")`.
 #'
 #' @section Deprecated classes:
-#' For [fis], use [Fis] instead\cr
-#' For [mf], use [Mf] instead\cr
-#' For [mf_triangular], use [MfTriangular] instead\cr
-#' For [mf_trapezoidal_inf], use [MfTrapezoidalInf] instead\cr
-#' For [mf_trapezoidal_sup], use [MfTrapezoidalSup] instead\cr
-#' For [mf_trapezoidal], use [MfTrapezoidal] instead\cr
+#' For [fis][fis-deprecated], use [Fis] instead\cr
+#' For [mf][mf-deprecated], use [Mf] instead\cr
+#' For [mf_triangular][mf_triangular-deprecated], use [MfTriangular] instead\cr
+#' For [mf_trapezoidal_inf][mf_trapezoidal_inf-deprecated], use [MfTrapezoidalInf] instead\cr
+#' For [mf_trapezoidal_sup][mf_trapezoidal_sup-deprecated], use [MfTrapezoidalSup] instead\cr
+#' For [mf_trapezoidal][mf_trapezoidal-deprecated], use [MfTrapezoidal] instead\cr
 #'
 #' @seealso [fis-deprecated]\cr
 #' [mf-deprecated]\cr
@@ -71,7 +71,7 @@ NULL
 #' @section Methods:
 #' \describe{
 #' \item{`infer_output(data, output_index)`}{
-#' WARNING !!! the `output_index` is now 1-based indexed in [Fis], was 0-based indexed in [fis-deprecated]}
+#' WARNING !!! the `output_index` is now 1-based indexed in [Fis], was 0-based indexed in [fis][fis-deprecated]}
 #' }
 #'
 #' @seealso [FisPro-deprecated]

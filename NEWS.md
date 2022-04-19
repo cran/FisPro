@@ -1,3 +1,7 @@
+# FisPro 1.1.1
+
+* Fix compilation warnings
+
 # FisPro 1.1
 
 ### Deprecated

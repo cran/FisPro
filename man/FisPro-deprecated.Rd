@@ -10,12 +10,12 @@ Help pages for deprecated functions are available at \code{help("<class>-depreca
 }
 \section{Deprecated classes}{
 
-For \link{fis}, use \link[=fis]{Fis} instead\cr
-For \link{mf}, use \link[=mf]{Mf} instead\cr
-For \link{mf_triangular}, use \link{MfTriangular} instead\cr
-For \link{mf_trapezoidal_inf}, use \link{MfTrapezoidalInf} instead\cr
-For \link{mf_trapezoidal_sup}, use \link{MfTrapezoidalSup} instead\cr
-For \link{mf_trapezoidal}, use \link{MfTrapezoidal} instead\cr
+For \link[=fis-deprecated]{fis}, use \link{Fis} instead\cr
+For \link[=mf-deprecated]{mf}, use \link{Mf} instead\cr
+For \link[=mf_triangular-deprecated]{mf_triangular}, use \link{MfTriangular} instead\cr
+For \link[=mf_trapezoidal_inf-deprecated]{mf_trapezoidal_inf}, use \link{MfTrapezoidalInf} instead\cr
+For \link[=mf_trapezoidal_sup-deprecated]{mf_trapezoidal_sup}, use \link{MfTrapezoidalSup} instead\cr
+For \link[=mf_trapezoidal-deprecated]{mf_trapezoidal}, use \link{MfTrapezoidal} instead\cr
 }
 
 \seealso{

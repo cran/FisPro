@@ -1325,7 +1325,7 @@ class MFDPOSS:public MF
   int NbParams() const { return pL->GetSize(); };
   double getMaxposs() const { return maxposs; };
 
-  void Print(FILE * f)
+  void Print(FILE * f) const
   {
     long save_index = pL->curI();
 

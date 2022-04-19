@@ -30,5 +30,8 @@ test_that("MfTrapezoidal equality", {
 test_that("MfTrapezoidal to_string", {
   mf <- NewMfTrapezoidal(0, 1, 2, 3)
   mf$label <- "foo"
-  expect_equal(mf$to_string(), "mf_trapezoidal(\"foo\", 0, 1, 2, 3)")
+  expected <- "mf_trapezoidal(\"foo\", 0, 1, 2, 3)"
+  expect_equal(mf$to_string(), expected)
+  output <- capture.output(show(mf))
+  expect_equal(output, expected)
 })

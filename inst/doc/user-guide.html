@@ -15,39 +15,52 @@
 
 <title>User Guide</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -67,7 +80,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -121,6 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -317,101 +331,124 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">User Guide</h1>
-<h3 class="subtitle">Package FisPro 1.1</h3>
+<h3 class="subtitle">Package FisPro 1.1.1</h3>
 <h4 class="author">Jean-Luc Lablée, Serge Guillaume</h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#build-a-fis-from-a-configuration-file">Build a FIS from a configuration file</a></li>
-<li><a href="#build-a-fis-from-scratch">Build a FIS from scratch</a><ul>
-<li><a href="#create-inputs">Create inputs</a></li>
-<li><a href="#create-outputs">Create outputs</a></li>
-<li><a href="#create-the-rule-base">Create the rule base</a></li>
-<li><a href="#save-the-fis-configuration-file">Save the FIS configuration file</a></li>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#build-a-fis-from-a-configuration-file" id="toc-build-a-fis-from-a-configuration-file">Build a FIS from a
+configuration file</a></li>
+<li><a href="#build-a-fis-from-scratch" id="toc-build-a-fis-from-scratch">Build a FIS from scratch</a>
+<ul>
+<li><a href="#create-inputs" id="toc-create-inputs">Create
+inputs</a></li>
+<li><a href="#create-outputs" id="toc-create-outputs">Create
+outputs</a></li>
+<li><a href="#create-the-rule-base" id="toc-create-the-rule-base">Create
+the rule base</a></li>
+<li><a href="#save-the-fis-configuration-file" id="toc-save-the-fis-configuration-file">Save the FIS configuration
+file</a></li>
 </ul></li>
-<li><a href="#fis-inference">FIS inference</a></li>
+<li><a href="#fis-inference" id="toc-fis-inference">FIS
+inference</a></li>
 </ul>
 </div>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This package is the R implementation of functions to manage a Fuzzy Inference System (FIS) provided by the open source software <a href="https://www.fispro.org">FisPro</a>.<br> <strong>FisPro</strong> allows to create Fuzzy Inference Systems and to use them for reasoning purposes, especially for simulating a physical or biological system.<br> In this brief User Guide we describe how to build and use a FIS to infer input values.<br> See <a href="https://www.fispro.org/documentation/en/inline-help/node39.html">Fuzzy Logic Elementary Glossary</a> for more details about Fuzzy Logic.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(FisPro)</span></code></pre></div>
+<p>This package is the R implementation of functions to manage a Fuzzy
+Inference System (FIS) provided by the open source software <a href="https://www.fispro.org">FisPro</a>.<br> <strong>FisPro</strong>
+allows to create Fuzzy Inference Systems and to use them for reasoning
+purposes, especially for simulating a physical or biological system.<br>
+In this brief User Guide we describe how to build and use a FIS to infer
+input values.<br> See <a href="https://www.fispro.org/documentation/en/inline-help/node39.html">Fuzzy
+Logic Elementary Glossary</a> for more details about Fuzzy Logic.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FisPro)</span></code></pre></div>
 </div>
 <div id="build-a-fis-from-a-configuration-file" class="section level2">
 <h2>Build a FIS from a configuration file</h2>
 <p>The FIS configuration file can be designed using the <a href="https://www.fispro.org">FisPro</a> open source software.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>fis_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;test.fis&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;FisPro&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>fis &lt;-<span class="st"> </span><span class="kw">NewFis</span>(fis_file)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fis_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;test.fis&quot;</span>, <span class="at">package =</span> <span class="st">&quot;FisPro&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fis <span class="ot">&lt;-</span> <span class="fu">NewFis</span>(fis_file)</span></code></pre></div>
 </div>
 <div id="build-a-fis-from-scratch" class="section level2">
 <h2>Build a FIS from scratch</h2>
-<p>Create a new empty FIS.<br> The design must be completed using the available functions to add inputs, outputs and rules before it can be used for inference.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>fis &lt;-<span class="st"> </span><span class="kw">NewFis</span>()</span>
-<span id="cb3-2"><a href="#cb3-2"></a>fis<span class="op">$</span>name &lt;-<span class="st"> &quot;foo&quot;</span></span></code></pre></div>
+<p>Create a new empty FIS.<br> The design must be completed using the
+available functions to add inputs, outputs and rules before it can be
+used for inference.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fis <span class="ot">&lt;-</span> <span class="fu">NewFis</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;foo&quot;</span></span></code></pre></div>
 <div id="create-inputs" class="section level3">
 <h3>Create inputs</h3>
 <p>Add 2 inputs to the FIS.</p>
-<p>Create the first input with 2 MFs regular standardized fuzzy partition:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>fisin1 &lt;-<span class="st"> </span><span class="kw">NewFisIn</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>fisin1<span class="op">$</span>name &lt;-<span class="st"> &quot;input1&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>fis<span class="op">$</span><span class="kw">add_input</span>(fisin1)</span></code></pre></div>
+<p>Create the first input with 2 MFs regular standardized fuzzy
+partition:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fisin1 <span class="ot">&lt;-</span> <span class="fu">NewFisIn</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fisin1<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;input1&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_input</span>(fisin1)</span></code></pre></div>
 <p>Create the second input with 3 MFs:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>fisin2 &lt;-<span class="st"> </span><span class="kw">NewFisIn</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a>fisin2<span class="op">$</span>name &lt;-<span class="st"> &quot;input2&quot;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a>mf1 &lt;-<span class="st"> </span><span class="kw">NewMfTrapezoidalInf</span>(<span class="dv">0</span>, <span class="fl">0.5</span>)</span>
-<span id="cb5-5"><a href="#cb5-5"></a>mf1<span class="op">$</span>label &lt;-<span class="st"> &quot;Low&quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>fisin2<span class="op">$</span><span class="kw">add_mf</span>(mf1)</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>mf2 &lt;-<span class="st"> </span><span class="kw">NewMfTriangular</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)</span>
-<span id="cb5-9"><a href="#cb5-9"></a>mf2<span class="op">$</span>label &lt;-<span class="st"> &quot;Average&quot;</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>fisin2<span class="op">$</span><span class="kw">add_mf</span>(mf2)</span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a>mf3 &lt;-<span class="st"> </span><span class="kw">NewMfTrapezoidalSup</span>(<span class="fl">0.5</span>, <span class="dv">1</span>)</span>
-<span id="cb5-13"><a href="#cb5-13"></a>mf3<span class="op">$</span>label &lt;-<span class="st"> &quot;High&quot;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>fisin2<span class="op">$</span><span class="kw">add_mf</span>(mf3)</span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>fis<span class="op">$</span><span class="kw">add_input</span>(fisin2)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fisin2 <span class="ot">&lt;-</span> <span class="fu">NewFisIn</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fisin2<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;input2&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mf1 <span class="ot">&lt;-</span> <span class="fu">NewMfTrapezoidalInf</span>(<span class="dv">0</span>, <span class="fl">0.5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mf1<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="st">&quot;Low&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>fisin2<span class="sc">$</span><span class="fu">add_mf</span>(mf1)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>mf2 <span class="ot">&lt;-</span> <span class="fu">NewMfTriangular</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>mf2<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="st">&quot;Average&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>fisin2<span class="sc">$</span><span class="fu">add_mf</span>(mf2)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>mf3 <span class="ot">&lt;-</span> <span class="fu">NewMfTrapezoidalSup</span>(<span class="fl">0.5</span>, <span class="dv">1</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>mf3<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="st">&quot;High&quot;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>fisin2<span class="sc">$</span><span class="fu">add_mf</span>(mf3)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_input</span>(fisin2)</span></code></pre></div>
 </div>
 <div id="create-outputs" class="section level3">
 <h3>Create outputs</h3>
 <p>Add 2 outputs to the FIS.</p>
 <p>Create a crisp output with range [0, 1]:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>fisout1 &lt;-<span class="st"> </span><span class="kw">NewFisOutCrisp</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>fisout1<span class="op">$</span>name &lt;-<span class="st"> &quot;output1&quot;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>fis<span class="op">$</span><span class="kw">add_output</span>(fisout1)</span></code></pre></div>
-<p>Create a fuzzy output with 2 MFs regular standardized fuzzy partition in range [0, 1]:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>fisout2 &lt;-<span class="st"> </span><span class="kw">NewFisOutFuzzy</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>fisout2<span class="op">$</span>name &lt;-<span class="st"> &quot;output2&quot;</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>fis<span class="op">$</span><span class="kw">add_output</span>(fisout2)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fisout1 <span class="ot">&lt;-</span> <span class="fu">NewFisOutCrisp</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fisout1<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;output1&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_output</span>(fisout1)</span></code></pre></div>
+<p>Create a fuzzy output with 2 MFs regular standardized fuzzy partition
+in range [0, 1]:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fisout2 <span class="ot">&lt;-</span> <span class="fu">NewFisOutFuzzy</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fisout2<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;output2&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_output</span>(fisout2)</span></code></pre></div>
 </div>
 <div id="create-the-rule-base" class="section level3">
 <h3>Create the rule base</h3>
-<p>Add 2 rules to the FIS.<br> Each rule is initialized with a vector of premises and conclusions.<br> - a premise is the 1-based index of MF in the input [FisIn], 0 means the rule is incompelete.<br> - a conclusion is a numeric value for crisp output [FisOutCrisp], or the 1-based index of MF in the fuzzy output [FisOutFuzzy].<br> In this example the second rule is incomplete, the second input of the FIS has no effect on this rule.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>fis<span class="op">$</span><span class="kw">add_rule</span>(<span class="kw">NewRule</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)))</span>
-<span id="cb8-2"><a href="#cb8-2"></a>fis<span class="op">$</span><span class="kw">add_rule</span>(<span class="kw">NewRule</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)))</span></code></pre></div>
+<p>Add 2 rules to the FIS.<br> Each rule is initialized with a vector of
+premises and conclusions.<br> - a premise is the 1-based index of MF in
+the input [FisIn], 0 means the rule is incompelete.<br> - a conclusion
+is a numeric value for crisp output [FisOutCrisp], or the 1-based index
+of MF in the fuzzy output [FisOutFuzzy].<br> In this example the second
+rule is incomplete, the second input of the FIS has no effect on this
+rule.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_rule</span>(<span class="fu">NewRule</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">add_rule</span>(<span class="fu">NewRule</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)))</span></code></pre></div>
 </div>
 <div id="save-the-fis-configuration-file" class="section level3">
 <h3>Save the FIS configuration file</h3>
 <p>Save the FIS to the file “foo.fis”:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>fis<span class="op">$</span><span class="kw">save</span>(<span class="st">&quot;foo.fis&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fis<span class="sc">$</span><span class="fu">save</span>(<span class="st">&quot;foo.fis&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="fis-inference" class="section level2">
 <h2>FIS inference</h2>
 <p>Infers all outputs:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>inferred &lt;-<span class="st"> </span>fis<span class="op">$</span><span class="kw">infer</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>inferred <span class="ot">&lt;-</span> fis<span class="sc">$</span><span class="fu">infer</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
 <p>Infers first output:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>inferred_output1 &lt;-<span class="st"> </span>fis<span class="op">$</span><span class="kw">infer_output</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>), <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>inferred_output1 <span class="ot">&lt;-</span> fis<span class="sc">$</span><span class="fu">infer_output</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>), <span class="dv">1</span>)</span></code></pre></div>
 <p>Infers second output:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>inferred_output2 &lt;-<span class="st"> </span>fis<span class="op">$</span><span class="kw">infer_output</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>inferred_output2 <span class="ot">&lt;-</span> fis<span class="sc">$</span><span class="fu">infer_output</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>), <span class="dv">2</span>)</span></code></pre></div>
 <p>Infers dataset:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>test_file &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;test_data.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;FisPro&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>dataset &lt;-<span class="st"> </span><span class="kw">read.csv</span>(test_file)</span>
-<span id="cb13-3"><a href="#cb13-3"></a>inferred_dataset &lt;-<span class="st"> </span>fis<span class="op">$</span><span class="kw">infer</span>(dataset)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;test_data.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;FisPro&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(test_file)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>inferred_dataset <span class="ot">&lt;-</span> fis<span class="sc">$</span><span class="fu">infer</span>(dataset)</span></code></pre></div>
 </div>
 
 

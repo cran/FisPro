@@ -29,5 +29,8 @@ test_that("MfTriangular equality", {
 test_that("MfTriangular to_string", {
   mf <- NewMfTriangular(0, 1, 2)
   mf$label <- "foo"
-  expect_equal(mf$to_string(), "mf_triangular(\"foo\", 0, 1, 2)")
+  expected <- "mf_triangular(\"foo\", 0, 1, 2)"
+  expect_equal(mf$to_string(), expected)
+  output <- capture.output(show(mf))
+  expect_equal(output, expected)
 })
