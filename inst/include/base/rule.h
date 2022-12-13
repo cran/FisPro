@@ -195,7 +195,7 @@ class PREMISE
   void ThrowFactorError( int factor, int input_number )
     {
       char error_msg[100];
-      sprintf( error_msg, "~RuleFactor~: %d >~NumberOfMFInInput~%d", factor, input_number+1 );
+      snprintf(error_msg, 100, "~RuleFactor~: %d >~NumberOfMFInInput~%d", factor, input_number+1 );
       throw std::runtime_error( error_msg );
     }
 
@@ -451,7 +451,7 @@ class CONCLUSION
   void ThrowConcError( int action, int output_number )
     {
       char error_msg[100];
-      sprintf( error_msg, "~RuleConc~: %d >~NumberOfMFInOutput~%d", action, output_number+1 );
+      snprintf(error_msg, 100, "~RuleConc~: %d >~NumberOfMFInOutput~%d", action, output_number+1 );
       throw std::runtime_error( error_msg );
     }
 

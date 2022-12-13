@@ -29,7 +29,7 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-char ErrorMsg[300];
+char ErrorMsg[ERROR_MSG_SIZE];
 char DataFilePath[DATAFILEMAXPATH] = "";
 char ** VarNameG = NULL;
 int NbVarG = 0;
@@ -414,7 +414,7 @@ int SearchNb(const char * source, double * val, int size,
 	{
 	  if(sscanf( tmp, "%lf %4s", &tmp_val, c ) != 1)
 	    {
-	      sprintf(ErrorMsg, "~NotaNumber~:  %.50s", tmp);
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NotaNumber~:  %.50s", tmp);
 	      throw std::runtime_error( ErrorMsg );
 	    }
 	  else val[i++] = tmp_val;    
@@ -535,7 +535,7 @@ char ReadSeparator(const char *FileName, int & hdr)
   // correct bug with minus and plus values - August 30 2007
   if (f.fail())
     {
-      sprintf( ErrorMsg, "~CannotOpenDataFile~: %.100s~", FileName);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenDataFile~: %.100s~", FileName);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -570,7 +570,7 @@ void SampleFileSize(const char *FileName, int &NbCol, int &NbRow, int & LineLen,
 
   if (f.fail())
     {
-      sprintf( ErrorMsg, "~CannotOpenDataFile~: %.100s~", FileName);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenDataFile~: %.100s~", FileName);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -613,7 +613,7 @@ int ReadOneItem(ifstream & flot, int bufsize, char sep, double * Ind, int N)
 
   catch( std::exception &e )
     {
-      sprintf( ErrorMsg, "~ErrorInDataFile~\n~ErrorInReadOneItem~:%.50s\n%.100s", buf, e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInDataFile~\n~ErrorInReadOneItem~:%.50s\n%.100s", buf, e.what() );
       delete [] buf;
       throw std::runtime_error( ErrorMsg );
     }
@@ -632,7 +632,7 @@ void ReadItems(const char *FileName, int NbVals, int NbInd, double ** vv, int bu
 
   if (f.fail())
     {
-      sprintf( ErrorMsg, "~CannotOpenDataFile~: %.100s~", FileName);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenDataFile~: %.100s~", FileName);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -653,7 +653,7 @@ void ReadItems(const char *FileName, int NbVals, int NbInd, double ** vv, int bu
 	  f.getline(buf, bufsize);
 	  if(SearchVarNames(buf, NbVals, sep) != NbVals)
 	    {
-	      sprintf( ErrorMsg,"~ErrorInDataFile~: %.100s\n~UnexpectedNumberOfColumnsInLineOne ~", FileName);
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE,"~ErrorInDataFile~: %.100s\n~UnexpectedNumberOfColumnsInLineOne ~", FileName);
 	      //	      delete [] buf;
 	      throw std::runtime_error(ErrorMsg);
 	    }
@@ -665,7 +665,7 @@ void ReadItems(const char *FileName, int NbVals, int NbInd, double ** vv, int bu
 	  if((strlen(buf) != 0) && (buf[0] != 0x0D))
 	    if(SearchNb(buf, vv[j], NbVals, sep)  != NbVals )
 	      {
-		sprintf( ErrorMsg, "~ErrorInDataFile~: %.100s\n~UnexpectedNumberOfColumnsInLine~ %d~", FileName, j + 1);
+		snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInDataFile~: %.100s\n~UnexpectedNumberOfColumnsInLine~ %d~", FileName, j + 1);
 		//delete [] buf;
 		throw std::runtime_error( ErrorMsg );
 	      }
@@ -675,7 +675,7 @@ void ReadItems(const char *FileName, int NbVals, int NbInd, double ** vv, int bu
   catch( std::exception &e )
     {
       delete [] buf;
-      sprintf( ErrorMsg, "~ErrorInDataFile~\n~ErrorInLine~: %d\n%.100s", j+1, e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInDataFile~\n~ErrorInLine~: %d\n%.100s", j+1, e.what() );
       throw std::runtime_error( ErrorMsg );
     }
 }// End of ReadItems
@@ -1009,12 +1009,12 @@ void ReadTemplate(char * file, double &KW, double &SW)
   
   if (ncol !=2)
     {
-      sprintf( ErrorMsg, "~#columns~must~be~equal~to~two");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~#columns~must~be~equal~to~two");
       throw std::runtime_error( ErrorMsg );
     }
   if (nrow<1)
     {
-      sprintf( ErrorMsg, "no~rows~in~template~file");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "no~rows~in~template~file");
       throw std::runtime_error( ErrorMsg );
     }
   KW=templ[0][0];
@@ -1046,7 +1046,7 @@ void WriteTemplate(char * file, double KW, double SW)
   catch(std::exception &e)
     {
       if (f!=NULL) fclose(f);
-      sprintf( ErrorMsg, "problem~in~writing~template~file: %.100s~",file);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "problem~in~writing~template~file: %.100s~",file);
       throw std::runtime_error( ErrorMsg );
     }
  

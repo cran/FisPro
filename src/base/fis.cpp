@@ -111,7 +111,7 @@ void FIS::InitSystem(const char * fichier, int Cover) //throw(std::runtime_error
 
   if (! f)
     {
-      sprintf( ErrorMsg, "~CannotOpenFISFile~: %.100s~", fichier);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenFISFile~: %.100s~", fichier);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -310,7 +310,7 @@ double FIS::Infer(double * v, int out_number, FILE * fic, FILE *display, double 
 
   if(NbRules == 0)
     {
-      sprintf( ErrorMsg, "~NoRuleToInfer~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NoRuleToInfer~");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -347,7 +347,7 @@ double FIS::Infer(double * v, int out_number, FILE * fic, FILE *display, double 
 	    In[i]->SetEqDegs(v[i]);
 	  else
 	    {
-	      sprintf( ErrorMsg, "~UnknownMissingValueStrategy~: %.50s", strMissingValues );
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~UnknownMissingValueStrategy~: %.50s", strMissingValues );
 	      throw std::runtime_error( ErrorMsg );
 	    }
 	}
@@ -411,7 +411,7 @@ double FIS::Infer(MF ** v, int out_number, FILE *fic, FILE *display) const
 
   if(NbRules == 0)
     {
-      sprintf( ErrorMsg, "~NoRuleToInfer~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NoRuleToInfer~");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -529,7 +529,7 @@ double FIS::InferCheck(double * v, double ** Val, int nb, int out_number, FILE *
   // add protection for no rule case - bch July 21, 2009
   if (NbRules<=0)
     {
-      sprintf( ErrorMsg, "~No rule - inference is not possible~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~No rule - inference is not possible~");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -550,7 +550,7 @@ double FIS::InferCheck(MF ** v, double ** Val, int nb, int out_number, FILE * fi
   // add protection for no rule case - bch July 21, 2009
   if (NbRules<=0)
     {
-      sprintf( ErrorMsg, "~No rule - inference is not possible~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~No rule - inference is not possible~");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -810,7 +810,7 @@ double FIS::Performance(int NumS, const char * fdata, double &Couvert, double & 
   if( (NumS < 0) || (NumS > NbOut - 1) || (! Out[NumS]->IsActive()) )
     {
       Couvert = 0.;
-      sprintf( ErrorMsg, "~InvalidOutputNumber~: %d~", NumS);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InvalidOutputNumber~: %d~", NumS);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -831,7 +831,7 @@ double FIS::Performance(int NumS, const char * fdata, double &Couvert, double & 
   if(fres)
     if((f = fopen(fres, "wt")) == NULL)
       {
-	sprintf( ErrorMsg, "~CannotOpenResultFile~: %.100s~", fres);
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenResultFile~: %.100s~", fres);
 	throw std::runtime_error( ErrorMsg );
       }
   //read data -allocate Data array
@@ -919,7 +919,7 @@ double FIS::Perf(int NumS, double ** Data, int NbEx, double & Couvert, double & 
   if( (NumS < 0) || (NumS > NbOut - 1) || (! Out[NumS]->IsActive()) )
     {
       Couvert = 0.;
-      sprintf( ErrorMsg, "~InvalidOutputNumber~: %d~", NumS);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InvalidOutputNumber~: %d~", NumS);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -1274,8 +1274,9 @@ void FIS::SetName( const char *name )
   //*********************************
 {
   delete [] Name;
-  Name = new char[strlen(name)+1];
-  sprintf( Name, "%s", name );
+  int len = strlen(name)+1;
+  Name = new char[len];
+  snprintf(Name, len, "%s", name );
 }
 
 
@@ -1284,8 +1285,9 @@ void FIS::SetConjunction( const char *conjunction )
   //***********************************************
 {
   delete [] cConjunction;
-  cConjunction = new char[strlen(conjunction)+1];
-  sprintf( cConjunction, "%s", conjunction );
+  int len = strlen(conjunction)+1;
+  cConjunction = new char[len];
+  snprintf(cConjunction, len, "%s", conjunction );
 
   if( Rule == NULL )    return;
   int *facteurs = NULL;
@@ -1312,16 +1314,18 @@ void FIS::SetMissingValues( const char *missing_values )
   //****************************************************
 {
   delete [] strMissingValues;
-  strMissingValues = new char[strlen(missing_values)+1];
-  sprintf( strMissingValues, "%s", missing_values );
+  int len = strlen(missing_values)+1;
+  strMissingValues = new char[len];
+  snprintf(strMissingValues, len, "%s", missing_values );
 }
 
 void FIS::SetErrorIndex( const char *index )
   //****************************************
 {
   delete [] strErrorIndex;
-  strErrorIndex = new char[strlen(index)+1];
-  sprintf( strErrorIndex, "%s", index);
+  int len = strlen(index)+1;
+  strErrorIndex = new char[len];
+  snprintf(strErrorIndex, len, "%s", index);
 }
 
 
@@ -1814,7 +1818,7 @@ void FIS::Crisp2Fuz(int o, const char * DefuzType, double * c, int nc)
     {
       if(NbRules>=1)
 	{
-	  sprintf(ErrorMsg, "~NbRules=~%d~in~Crisp2Fuz~function~incompatible~with~c~array\n~",NbRules);
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NbRules=~%d~in~Crisp2Fuz~function~incompatible~with~c~array\n~",NbRules);
 	  throw std::runtime_error( ErrorMsg );
 	}
       Val = c;
@@ -1824,7 +1828,7 @@ void FIS::Crisp2Fuz(int o, const char * DefuzType, double * c, int nc)
 
   if(n > MAX_MF)
     {
-      sprintf(ErrorMsg, "~TooManyMFs~%d~ForOutput~%d~MaxAllowed~%d \n", n, o+1, MAX_MF);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~TooManyMFs~%d~ForOutput~%d~MaxAllowed~%d \n", n, o+1, MAX_MF);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -1926,7 +1930,7 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // skip empty lines and ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf( tmp, "[Interface]" );
+      snprintf(tmp, bufsize, "[Interface]" );
       if( !strncmp(tmp, buf, strlen(tmp)) ) //Obsolete config file
 	{
 	  f.getline(buf, bufsize);
@@ -1937,10 +1941,10 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
 	  // ignores comment lines beginning with # or %
 	}
 
-      sprintf( tmp, "[System]" );
+      snprintf(tmp, bufsize, "[System]" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -1951,15 +1955,15 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores comment lines beginning with # or %
 
 
-      sprintf( tmp, "Name=" );
+      snprintf(tmp, bufsize, "Name=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       SetName(tmp);
@@ -1970,16 +1974,16 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf( tmp, "Ninputs=" );
+      snprintf(tmp, bufsize, "Ninputs=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       NbIn = atoi(buf + strlen(tmp));
       if(NbIn < 0)
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~InvalidNumberOfInputs~: %-3d~", NbIn );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~InvalidNumberOfInputs~: %-3d~", NbIn );
 	  NbIn = 0;
 	  throw std::runtime_error( ErrorMsg );
 	}
@@ -1991,16 +1995,16 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf( tmp, "Noutputs=" );
+      snprintf(tmp, bufsize, "Noutputs=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       NbOut = atoi(buf + strlen(tmp));
       if(NbOut < 0)
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~InvalidNumberOfOutputs~: %-3d~", NbOut );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~InvalidNumberOfOutputs~: %-3d~", NbOut );
 	  NbOut = 0;
 	  throw std::runtime_error( ErrorMsg );
 	}
@@ -2013,16 +2017,16 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores comment lines beginning with # or %
 
 
-      sprintf( tmp, "Nrules=" );
+      snprintf(tmp, bufsize, "Nrules=" );
       if( strncmp(tmp, buf,  strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       NbRules = atoi(buf +  strlen(tmp));
       if(NbRules < 0)
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~InvalidNumberOfRules~: %-3d~", NbRules );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~InvalidNumberOfRules~: %-3d~", NbRules );
 	  NbRules = 0;
 	  throw std::runtime_error( ErrorMsg );
 	}
@@ -2033,10 +2037,10 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       }while((strlen(buf) == 0) || (buf[0]==0x0D) || (buf[0]==0x23)|| (buf[0]==0x25));
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
-      sprintf( tmp, "Nexceptions=" );
+      snprintf(tmp, bufsize, "Nexceptions=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       NbExceptions = atoi(buf + strlen(tmp));
@@ -2050,15 +2054,15 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf( tmp, "Conjunction=" );
+      snprintf(tmp, bufsize, "Conjunction=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       SetConjunction(tmp);
@@ -2070,15 +2074,15 @@ void FIS::ReadHdr(ifstream & f, int bufsize) //throw(std::runtime_error)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"MissingValues=");
+      snprintf(tmp, bufsize, "MissingValues=");
       if( strncmp(tmp, buf,  strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf , tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~StringSeparatorNotFoundInString~: %.50s~", buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       SetMissingValues(tmp);
@@ -2112,10 +2116,10 @@ void FIS::ReadIn(ifstream &f, int bufsize, int num) //throw(std::runtime_error)
       // ignores comment lines beginning with # or %
 
 
-      sprintf(tmp,"[Input%d]", num + 1);    // Tag
+      snprintf(tmp, bufsize, "[Input%d]", num + 1);    // Tag
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2155,10 +2159,10 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores comment lines beginning with # or %
 
 
-      sprintf(tmp,"[Output%d]", num + 1);    // Tag
+      snprintf(tmp, bufsize, "[Output%d]", num + 1);    // Tag
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2168,15 +2172,15 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"Nature=");
+      snprintf(tmp, bufsize, "Nature=");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, nature))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2188,15 +2192,15 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"Defuzzification=");
+      snprintf(tmp, bufsize, "Defuzzification=");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, cDefuz))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2207,15 +2211,15 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"Disjunction=");
+      snprintf(tmp, bufsize, "Disjunction=");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, cDisj))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2226,10 +2230,10 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"DefaultValue=");
+      snprintf(tmp, bufsize, "DefaultValue=");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       vDefault = strtod(buf + strlen(tmp), NULL);
@@ -2240,22 +2244,22 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf(tmp,"Classif=");
+      snprintf(tmp, bufsize, "Classif=");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", num+1, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", num+1, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if( ! strncmp(tmp, "no", 4) )  cclas = false;
       else  if( ! strncmp(tmp, "yes", 4) ) cclas = true;
       else
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: Classif=yes or no\n~ReadString~: %.50s~", num+1, tmp );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~ExpectedString~: Classif=yes or no\n~ReadString~: %.50s~", num+1, tmp );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2266,7 +2270,7 @@ void FIS::ReadOut(ifstream &f, int bufsize, int num, int Cover)
 	Out[num] = new OUT_FUZZY(f, bufsize, num + 1, cDefuz, cDisj, cclas, vDefault, Cover);
       else
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~UnknownNature~:~%.50s~", num+1, nature );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~UnknownNature~:~%.50s~", num+1, nature );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if (tmp !=NULL) delete [] tmp;
@@ -2306,10 +2310,10 @@ void FIS::ReadRules(ifstream &f, int bufsize) //throw(std::runtime_error)
       // ignores comment lines beginning with # or %
 
 
-      sprintf(tmp, "[Rules]");
+      snprintf(tmp, bufsize, "[Rules]");
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -2343,7 +2347,7 @@ void FIS::ReadRules(ifstream &f, int bufsize) //throw(std::runtime_error)
 	  ifstream freg(tmp);
 	  if(!freg)
 	    {
-	      sprintf( ErrorMsg, "~ErrorInFISFile~\n~CannotOpenRulesFile~: %.100s~", tmp );
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~CannotOpenRulesFile~: %.100s~", tmp );
 	      throw std::runtime_error( ErrorMsg );
 	    }
 
@@ -2388,11 +2392,11 @@ void FIS::ReadExcep(ifstream &f, int bufsize)
   // ignores comment lines beginning with # or %
 
 
-  sprintf(tmp, "[Exceptions]");
+  snprintf(tmp, bufsize, "[Exceptions]");
   if( strncmp(tmp, buf, strlen(tmp)) )
     if( strncmp(tmp, buf, strlen(tmp)) )
       {
-	sprintf( ErrorMsg, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", tmp, buf );
 	throw std::runtime_error( ErrorMsg );
       }
 
@@ -2446,14 +2450,15 @@ void FIS::Print(FILE *f) const
   else
     {
       char * fich;
-      fich = new char[strlen(Name) + 10];
-      sprintf(fich, "%s.rules", Name);
+      int len = strlen(Name) + 10;
+      fich = new char[len];
+      snprintf(fich, len, "%s.rules", Name);
       fprintf(f, "\nsee file %s\n", fich);
       FILE * g;
       g = fopen(fich, "wt");
       if( ! g)
 	{
-      sprintf(ErrorMsg, "\nFile opening failed: %s\n", fich);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "\nFile opening failed: %s\n", fich);
       throw std::runtime_error( ErrorMsg );
 	}
       for(i = 0; i < NbRules; i++)  Rule[i]->Print(g);
@@ -2772,7 +2777,7 @@ void FIS::SortRules(double **dat, int n, int order)
 		In[i]->SetEqDegs(dat[j][i]);
 	      else
 		{
-		  sprintf( ErrorMsg, "~UnknownMissingValueStrategy~: %.50s", strMissingValues );
+		  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~UnknownMissingValueStrategy~: %.50s", strMissingValues );
 		  throw std::runtime_error( ErrorMsg );
 		}
 	    }
@@ -2823,7 +2828,7 @@ int FIS::VocReduc(int NumS, double **Data, int NbEx, double MuSeuil, double Perf
 {
   if( (NumS < 0) || (NumS > NbOut - 1) || (! Out[NumS]->IsActive()) )
     {
-      sprintf( ErrorMsg, "~InvalidOutputNumber~: %d~", NumS);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InvalidOutputNumber~: %d~", NumS);
       throw std::runtime_error( ErrorMsg );
     }
   // Nclas:  number of classes
@@ -2856,7 +2861,7 @@ int FIS::VocReduc(int NumS, double **Data, int NbEx, double MuSeuil, double Perf
 
   if(!classif && NConc<2 && NConc!=0)
     {
-      sprintf(ErrorMsg, "~Must Be At Least Two Conclusions (min-max)~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Must Be At Least Two Conclusions (min-max)~");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -2994,7 +2999,7 @@ double FIS::WeightedPerf(int NumS, char * fdata, int NPart, char *DomBreakpoints
 
   if( (ErrorType < 1) || (ErrorType > 5) )
     {
-      sprintf( ErrorMsg, "~ErrorType must be 1,2,3,4 or 5~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorType must be 1,2,3,4 or 5~");
       throw std::runtime_error( ErrorMsg );
     }
   // compute the performance of each part and the global performance, initialize all arrays
@@ -3059,7 +3064,7 @@ int FIS::Performance(int NumS, char * fdata, int NPart, char *DomBreakPoints,
   if( (NumS < 0) || (NumS > NbOut - 1) || (! Out[NumS]->IsActive()) )
     {
       Couvert[NPart] = 0.;
-      sprintf( ErrorMsg, "~InvalidOutputNumber~: %d~", NumS);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InvalidOutputNumber~: %d~", NumS);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -3079,7 +3084,7 @@ int FIS::Performance(int NumS, char * fdata, int NPart, char *DomBreakPoints,
   if(fres)
     if((f = fopen(fres, "wt")) == NULL)
       {
-	sprintf( ErrorMsg, "~CannotOpenResultFile~: %.100s~", fres);
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenResultFile~: %.100s~", fres);
 	throw std::runtime_error( ErrorMsg );
       }
 
@@ -3205,13 +3210,13 @@ void FIS::InitBreakPoints(int NumS, int Npart, char *DomBreakPoints, double *&Br
 	{
 	  if(BreakPoints[i]<=(Out[NumS]->min()))
 	    {
-	      sprintf(ErrorMsg, "~Invalid BreakPoint : %f Less Than or Equal To Inferior Bound %f~\n",
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Invalid BreakPoint : %f Less Than or Equal To Inferior Bound %f~\n",
 		      BreakPoints[i], Out[NumS]->min());
 	      throw std::runtime_error(ErrorMsg);
 	    }
 	  else if(BreakPoints[i]>=(Out[NumS]->max()))
 	    {
-	      sprintf(ErrorMsg, "~Invalid BreakPoint : %f Higher Than or Equal To Superior Bound %f~\n",
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Invalid BreakPoint : %f Higher Than or Equal To Superior Bound %f~\n",
 		      BreakPoints[i], Out[NumS]->max());
 	      throw std::runtime_error(ErrorMsg);
 	    }
@@ -3242,7 +3247,7 @@ int FIS::Perf(int NumS, double ** Data, int NbEx, int NPart, double *&ResultTab,
   if( (NumS < 0) || (NumS > NbOut - 1) || (! Out[NumS]->IsActive()) )
     {
       Couvert[NPart] = 0.;
-      sprintf( ErrorMsg, "~InvalidOutputNumber~: %d~", NumS);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InvalidOutputNumber~: %d~", NumS);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -3488,6 +3493,7 @@ int FIS::Perf(int NumS, double ** Data, int NbEx, int NPart, double *&ResultTab,
 
 // **********    FATI INFERENCE FOR IMPLICATIVE RULES AND FUZZY INPUTS **********
 
+#ifndef R_PACKAGE
 void FIS::InferFatiPrep(int numout)
   //*******************************
 {
@@ -3513,6 +3519,8 @@ void FIS::InferFatiPrep(int numout)
       delete [] dpl;
     }
 }
+
+#endif // R_PACKAGE
 
 void FIS::KinkPoints(std::list<double> ** dl, int nout)
   //*****************************************************
@@ -3800,20 +3808,20 @@ MFDPOSS * FIS::InferFati(MFDPOSS ** v, int nalf, int numout, FILE * f, FILE *dis
 {
   if(NbIn < 0 || NbIn > 2)
     {
-      sprintf( ErrorMsg, "~Invalid#InputsInferFatiLimitedTo2~:  %d", NbIn);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Invalid#InputsInferFatiLimitedTo2~:  %d", NbIn);
       throw std::runtime_error( ErrorMsg );
     }
 
   if(NbRules == 0)
     {
-      sprintf( ErrorMsg, "~NoRuleToInfer~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NoRuleToInfer~");
       throw std::runtime_error( ErrorMsg );
     }
   // implicative case
   if (strcmp(Out[numout]->Defuzzify(),OUT_FUZZY::ImpFuzzyDefuz()))
     {
       // conjunctive system - call InferCheck
-      sprintf( ErrorMsg, "~OUTPUT~MUST~BE~IMPLICATIVE~FOR~FUZZY~INPUT~INFERENCE");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~OUTPUT~MUST~BE~IMPLICATIVE~FOR~FUZZY~INPUT~INFERENCE");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -3898,7 +3906,7 @@ int FIS::Conj2Imp(int numoutput, const char * DisjType, bool transfPart)
       allowedimpliMFs=allowedimpliMFs||(!strcmp(Out[numoutput]->GetMF(imf)->GetType(),"door"));
       if (!allowedimpliMFs)
 	{
-	  sprintf( ErrorMsg, "ForbiddenMFshape~in~implicative~Systems");
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "ForbiddenMFshape~in~implicative~Systems");
 	  throw std::runtime_error( ErrorMsg );
 	  //return -5;
 	}
@@ -4164,14 +4172,14 @@ int MergeRules(const char * Fis1, const char *Fis2, const char * Merge, const ch
 
   if(R.GetNbIn() != M.GetNbIn())
     {
-      sprintf( ErrorMsg, "~InMergeRules~, ~NbInMustBeTheSameInBothSystems~\n~Values~: %d %d\n",
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InMergeRules~, ~NbInMustBeTheSameInBothSystems~\n~Values~: %d %d\n",
 	       R.GetNbIn(), M.GetNbIn());
       throw std::runtime_error( ErrorMsg );
     }
 
   if(R.GetNbOut() != M.GetNbOut())
     {
-      sprintf( ErrorMsg, "~InMergeRules~, ~NbOutMustBeTheSameInBothSystems~\n~Values~: %d %d\n",
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InMergeRules~, ~NbOutMustBeTheSameInBothSystems~\n~Values~: %d %d\n",
 	       R.GetNbOut(), M.GetNbOut());
       throw std::runtime_error( ErrorMsg );
     }
@@ -4179,7 +4187,7 @@ int MergeRules(const char * Fis1, const char *Fis2, const char * Merge, const ch
   for(i = 0; i < R.GetNbIn(); i++)
     if(R.In[i]->GetNbMf() != M.In[i]->GetNbMf())
       {
-	sprintf( ErrorMsg, "~InMergeRules~, ~NbMfMustBeTheSameInBothSystems~\n~ValuesForInput~ %d: %d %d\n",
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InMergeRules~, ~NbMfMustBeTheSameInBothSystems~\n~ValuesForInput~ %d: %d %d\n",
 		 i+1, R.In[i]->GetNbMf(), M.In[i]->GetNbMf());
 	throw std::runtime_error( ErrorMsg );
       }
@@ -4187,7 +4195,7 @@ int MergeRules(const char * Fis1, const char *Fis2, const char * Merge, const ch
   for(i = 0; i < R.GetNbOut(); i++)
     if(R.Out[i]->GetNbMf() != M.Out[i]->GetNbMf())
       {
-	sprintf( ErrorMsg, "~InMergeRules~, ~NbMfMustBeTheSameInBothSystems~\n~ValuesForOutput~ %d: %d %d\n",
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InMergeRules~, ~NbMfMustBeTheSameInBothSystems~\n~ValuesForOutput~ %d: %d %d\n",
 		 i+1, R.Out[i]->GetNbMf(), M.Out[i]->GetNbMf());
 	throw std::runtime_error( ErrorMsg );
       }
@@ -4287,7 +4295,7 @@ int StableRules(char * firstfispart, int n, char * lastfispart, char * res, int 
 {
   if(n < 2)
     {
-      sprintf( ErrorMsg, "~InStableRules~, ~NbOfFisToBeAnalyzedLessThan2~: %d\n", n);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InStableRules~, ~NbOfFisToBeAnalyzedLessThan2~: %d\n", n);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -4303,8 +4311,9 @@ int StableRules(char * firstfispart, int n, char * lastfispart, char * res, int 
 
   i = strlen(firstfispart);
   if(lastfispart) i += strlen(lastfispart);
-  f1 = new char [i + 4];
-  f2 = new char [i + 4];
+  int len = i + 4;
+  f1 = new char [len];
+  f2 = new char [len];
 
   j = nfis = 0;
 
@@ -4312,9 +4321,9 @@ int StableRules(char * firstfispart, int n, char * lastfispart, char * res, int 
   for(i = 0; i < n; i++)
     {
       if(lastfispart!=NULL)
-	sprintf(f1, "%s.%d.%s", firstfispart, i, lastfispart);
+	snprintf(f1, len, "%s.%d.%s", firstfispart, i, lastfispart);
       else
-	sprintf(f1, "%s.%d", firstfispart, i);
+	snprintf(f1, len, "%s.%d", firstfispart, i);
 
       if((f = fopen(f1, "rt")) != NULL)
 	{ fclose(f); break;}
@@ -4324,16 +4333,16 @@ int StableRules(char * firstfispart, int n, char * lastfispart, char * res, int 
   for(i = j; i < n; i++)
     {
       if(lastfispart!=NULL)
-	sprintf(f2, "%s.%d.%s", firstfispart, i, lastfispart);
+	snprintf(f2, len, "%s.%d.%s", firstfispart, i, lastfispart);
       else
-	sprintf(f2, "%s.%d", firstfispart, i);
+	snprintf(f2, len, "%s.%d", firstfispart, i);
 
       if((f = fopen(f2, "rt")) != NULL)
 	{ fclose(f); break;}
     }
   if(i == n)
     {
-      sprintf( ErrorMsg, "~InStableRules~, ~NbOfValidFisLessThan2~: %d\n", n);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~InStableRules~, ~NbOfValidFisLessThan2~: %d\n", n);
       throw std::runtime_error( ErrorMsg );
     }
   j = ++i;
@@ -4346,9 +4355,9 @@ int StableRules(char * firstfispart, int n, char * lastfispart, char * res, int 
   for(i = j; i < n; i++)
     {
       if(lastfispart!=NULL)
-	sprintf(f2, "%s.%d.%s", firstfispart, i, lastfispart);
+	snprintf(f2, len, "%s.%d.%s", firstfispart, i, lastfispart);
       else
-	sprintf(f2, "%s.%d", firstfispart, i);
+	snprintf(f2, len, "%s.%d", firstfispart, i);
       if((f = fopen(f2, "rt")) != NULL) fclose(f);
       else continue;
       MergeRules( "merge.tmp", f2, "merge.tmp",  "occur.tab", concmat, conc);

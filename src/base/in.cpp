@@ -223,7 +223,7 @@ void FISIN::GetSFPparams(double *&p, int* &typemf, int & size, FILE *display)
   
   if (Nmf<2)
     {
-      sprintf( ErrorMsg, "~Nmf~must~be~>=2~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Nmf~must~be~>=2~");
       throw std::runtime_error( ErrorMsg );
     }
   typemf=new int[Nmf];
@@ -258,7 +258,7 @@ void FISIN::GetSFPparams(double *&p, int* &typemf, int & size, FILE *display)
 	    }
 	  else
 	    {
-	      sprintf( ErrorMsg, "~only~tri~or~trap~MFs~allowed~");
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~only~tri~or~trap~MFs~allowed~");
 	      throw std::runtime_error( ErrorMsg );
 	    }
 	}
@@ -484,7 +484,7 @@ FISIN::FISIN(int n, double *t, double min, double max) //throw(runtime_error);
 {
   if(!n || n%2) 
     {
-      sprintf(ErrorMsg, "~EvenNumberOfPointsNeededFor~TrapezoidalSFP~(n=%d)" , n);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~EvenNumberOfPointsNeededFor~TrapezoidalSFP~(n=%d)" , n);
       throw std::runtime_error(ErrorMsg);
     }
   int i;
@@ -637,7 +637,7 @@ void FISIN::UnNormalize() //throw(std::runtime_error)
 {
   if(OLower > OUpper)
     {
-      sprintf( ErrorMsg, "~NotPossibleTheFISWasNotNormalized~");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~NotPossibleTheFISWasNotNormalized~");
       throw std::runtime_error( ErrorMsg );
     }
   for ( int cptMF =0 ; cptMF < Nmf ; cptMF++ ) GetMF(cptMF)->UnNormalize(OLower,OUpper);
@@ -664,22 +664,22 @@ void FISIN::Init(ifstream &f, int bufsize, int num) //throw(std::runtime_error)
       // ignores comment lines beginning with # or %
 
       // Active = Activate
-      sprintf( tmp, "Active=" );
+      snprintf(tmp, bufsize, "Active=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), num, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), num, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), num, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), num, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if( ! strncmp(tmp, "no", 4) )  active = false;   //  inactive input
       else  if( ! strncmp(tmp, "yes", 4) ) active = true;
       else
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: Activate=yes or no\n~ReadString~: %.50s~", GetType(), num, tmp );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: Activate=yes or no\n~ReadString~: %.50s~", GetType(), num, tmp );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -688,15 +688,15 @@ void FISIN::Init(ifstream &f, int bufsize, int num) //throw(std::runtime_error)
       }while((strlen(buf) == 0) || (buf[0]==0x0D) || (buf[0]==0x23)|| (buf[0]==0x25));
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
-      sprintf( tmp, "Name=" );
+      snprintf(tmp, bufsize, "Name=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), num, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %-3d\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), num, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(SearchStr(buf, tmp))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), num, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), num, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       SetName(tmp);
@@ -709,30 +709,30 @@ void FISIN::Init(ifstream &f, int bufsize, int num) //throw(std::runtime_error)
 
 
       //  Range
-      sprintf( tmp, "Range=" );
+      snprintf(tmp, bufsize, "Range=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       Tab = new double [2];
       if((strlen(buf + strlen(tmp)) == 0) || (*(buf + strlen(tmp))==0x0D))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~EmptyString~");
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~EmptyString~");
 	  throw std::runtime_error( ErrorMsg );
 	}
 
       try { SearchNb(buf, Tab, 2, SEPARE, START_NB, END_NB);}
       catch( std::exception &e )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s (~Range~)\n%.80s", GetType(), Name, e.what() );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s (~Range~)\n%.80s", GetType(), Name, e.what() );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
       try { SetRange( Tab[0], Tab[1] ); }
       catch( std::exception &e )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n%.80s", GetType(), Name, e.what() );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n%.80s", GetType(), Name, e.what() );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -742,10 +742,10 @@ void FISIN::Init(ifstream &f, int bufsize, int num) //throw(std::runtime_error)
       // ignores the ^M of MS-DOS files read in Linux-Unix
       // ignores comment lines beginning with # or %
 
-      sprintf( tmp, "NMFs=" );
+      snprintf(tmp, bufsize, "NMFs=" );
       if( strncmp(tmp, buf, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, buf );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, buf );
 	  throw std::runtime_error( ErrorMsg );
 	}
       i =  atoi(buf + strlen(tmp));
@@ -796,24 +796,24 @@ void FISIN::ReadMf(char * ligne, int NumSef) //throw(std::runtime_error)
       nom  = new char[len];
       type = new char[len];
 
-      sprintf(tmp,"MF%d=",NumSef);
+      snprintf(tmp, len, "MF%d=", NumSef);
       if( strncmp(tmp, ligne, strlen(tmp)) )
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, ligne );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~ExpectedString~: %.50s\n~ReadString~: %.50s~", GetType(), Name, tmp, ligne );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
       offset = strlen(tmp);
       if(SearchStr(ligne + offset, nom))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), Name, NumSef, ligne );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), Name, NumSef, ligne );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
       char * index = strchr(ligne, SEPARE);
       if(SearchStr(index, type))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), Name, NumSef, ligne );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~StringSeparatorNotFoundInString~: %.50s~", GetType(), Name, NumSef, ligne );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -822,7 +822,7 @@ void FISIN::ReadMf(char * ligne, int NumSef) //throw(std::runtime_error)
       index = strchr(ligne + offset, SEPARE);
       if((strlen(index) == 0) ||  (index[0]==0x0D))
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~~EmptyString~");
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~~EmptyString~");
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -831,7 +831,7 @@ void FISIN::ReadMf(char * ligne, int NumSef) //throw(std::runtime_error)
       try { retour = SearchNb(index,  bornes, nb_bornes, SEPARE, START_NB, END_NB);}
       catch(std::exception &e)
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~FormatErrorInMFParameters~: %.50s\n%.50s~", GetType(), Name, NumSef, index, e.what() );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~FormatErrorInMFParameters~: %.50s\n%.50s~", GetType(), Name, NumSef, index, e.what() );
 	  throw std::runtime_error( ErrorMsg );
 	}
 
@@ -865,14 +865,14 @@ void FISIN::ReadMf(char * ligne, int NumSef) //throw(std::runtime_error)
 	    Fp[NumSef - 1] = new MFSINUSSUP(bornes[0], bornes[1]);
 	  else
 	    {
-	      sprintf( ErrorMsg, "UnknownMFType~: %.50s~\n~Or~\n~IncorrectNumberOfBounds~: %-3d", type, retour );
+	      snprintf(ErrorMsg, ERROR_MSG_SIZE, "UnknownMFType~: %.50s~\n~Or~\n~IncorrectNumberOfBounds~: %-3d", type, retour );
 	      throw std::runtime_error( ErrorMsg );
 	    }
 	  Fp[NumSef - 1]->SetName(nom);  // assigns the  MF name
 	}
       catch( std::exception &e )  // intercepts the exceptions in the MF constructors
 	{
-	  sprintf( ErrorMsg, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~%.50s~", GetType(), Name, NumSef, e.what() );
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~%.50s~: %.50s\n~MF~: %-3d\n~%.50s~", GetType(), Name, NumSef, e.what() );
 	  throw std::runtime_error( ErrorMsg );
 	}
       delete [] nom;
@@ -912,8 +912,9 @@ void FISIN::SetName(const char *name)
   //*********************************
 {
   delete [] Name;
-  Name = new char[strlen(name)+1];
-  sprintf( Name, "%s", name );
+  int len = strlen(name)+1;
+  Name = new char[len];
+  snprintf(Name, len, "%s", name );
 }
 
 void FISIN::SetStdMfNames(void)
@@ -924,7 +925,7 @@ void FISIN::SetStdMfNames(void)
 
   for(i = 0; i < Nmf; i ++)
     {
-      sprintf(MfName, "MF%d", i+1);
+      snprintf(MfName, 15, "MF%d", i+1);
       Fp[i]->SetName(MfName);
     }
 }
@@ -945,7 +946,7 @@ void FISIN::SetRange( double range_inf, double range_sup )  //throw(std::runtime
 {
   if( range_inf >= range_sup )
     {
-      sprintf(ErrorMsg, "~Range~Upper~(%8.3f)~MustBeHigherThan~Range~Lower~(%8.3f)" , range_inf, range_sup);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Range~Upper~(%8.3f)~MustBeHigherThan~Range~Lower~(%8.3f)" , range_inf, range_sup);
    throw std::runtime_error(ErrorMsg);
     }
   ValInf = range_inf;
@@ -1040,6 +1041,8 @@ void FISIN::RemoveMF( int sef_number )
   // else no change
 }
 
+#ifndef R_PACKAGE
+
 void FISIN::DecomposePart(std::list<double> *dL)
 //**********************************************
 {
@@ -1079,6 +1082,8 @@ void FISIN::DecomposePart(std::list<double> *dL)
     }
 }
 
+#endif // R_PACKAGE
+
 // Find the intervals of the partition which intersect
 // the alpha-cut door, fill the arrays of bounds
 // and return their number.
@@ -1104,6 +1109,8 @@ int FISIN::getIntersect(ACUT &door, double *inf, double *sup)
   delete mfd;
   return(n);
 }
+
+#ifndef R_PACKAGE
 
 void FISIN::DecomposePart(FILE *display)  // Not used
 //*****************************
@@ -1136,6 +1143,8 @@ void FISIN::DecomposePart(FILE *display)  // Not used
 	}
 	nPart = j;
 }
+
+#endif // R_PACKAGE
 //
 double *kG=NULL;
 int CmpKAsc(const void * a, const void *b)

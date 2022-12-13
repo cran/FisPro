@@ -111,8 +111,9 @@ void MF::SetName(const char *name)
   //******************************
 {
   delete [] Name;
-  Name = new char[strlen(name)+1];
-  sprintf( Name, "%s", name );
+  int len = strlen(name)+1;
+  Name = new char[len];
+  snprintf(Name, len, "%s", name );
 }
 
 MF * FuzNumber(double v, double kw, double sw)

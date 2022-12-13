@@ -4,7 +4,7 @@ INST_DIR=../inst
 INCLUDE_DIR=$(INST_DIR)/include
 LIB_DIR=$(INST_DIR)/lib$(R_ARCH)
 
-PKG_CPPFLAGS=-I. -I$(INCLUDE_DIR) -I$(INCLUDE_DIR)/base -DBOOST_NO_AUTO_PTR
+PKG_CPPFLAGS=-I. -I$(INCLUDE_DIR) -I$(INCLUDE_DIR)/base -DBOOST_NO_AUTO_PTR -DR_PACKAGE
 
 BASE_SOURCES=base/aggreg.cpp base/common.cpp base/defuz.cpp base/fis.cpp base/fuzzy_distance.cpp base/in.cpp base/mf.cpp base/mfdposs.cpp base/out.cpp base/pt.cpp base/rule.cpp
 WRAPPER_SOURCES=mf_wrapper.cpp fisin_wrapper.cpp fisout_wrapper.cpp fuzzy_range.cpp fuzzy_wrapper.cpp rule_wrapper.cpp fis_wrapper.cpp

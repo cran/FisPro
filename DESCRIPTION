@@ -1,7 +1,7 @@
 Package: FisPro
 Type: Package
 Title: Fuzzy Inference System Design and Optimization
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(
   person("Serge", "Guillaume", email = "serge.guillaume@inrae.fr", role = "aut"),
   person("Brigitte", "Charnomordic", email = "brigitte.charnomordic@inra.fr", role = "aut"),
@@ -29,8 +29,8 @@ RdMacros: Rdpack
 NeedsCompilation: yes
 LinkingTo: Rcpp, BH
 Suggests: testthat, rlang, knitr, rmarkdown
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
-Packaged: 2022-04-19 07:00:33 UTC; jllablee
+Packaged: 2022-12-13 09:30:01 UTC; jllablee
 Repository: CRAN
-Date/Publication: 2022-04-19 12:22:31 UTC
+Date/Publication: 2022-12-13 13:30:02 UTC

@@ -24,7 +24,7 @@ void FISOUT::Init( ifstream &f, int bufsize, int num, const char *OpDefuz, const
     }
   catch( std::exception &e )
     {
-      sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n%.100s", num, e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n%.100s", num, e.what() );
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -62,7 +62,7 @@ void  FISOUT::CheckImpliMF(MF* mfcandidate)
       allowedimpliMFs=allowedimpliMFs||(!strcmp(mfcandidate->GetType(),"door"));
       if (!allowedimpliMFs)
 	{
-	  sprintf( ErrorMsg, "ForbiddenMFshape~in~implicative~Systems");
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "ForbiddenMFshape~in~implicative~Systems");
 	  throw std::runtime_error( ErrorMsg );
 	}
     }
@@ -85,8 +85,9 @@ void FISOUT::SetOpDefuz( const char *op_defuz )
   //*******************************************
 {
   delete [] Defuz;
-  Defuz = new char[strlen(op_defuz)+1];
-  sprintf( Defuz, "%s", op_defuz );
+  int len = strlen(op_defuz)+1;
+  Defuz = new char[len];
+  snprintf(Defuz, len, "%s", op_defuz );
 
   if(Def) delete Def;
   Def = NULL;
@@ -143,7 +144,7 @@ void OUT_FUZZY::SetOpDefuz( const char *op_defuz )
     }  
   else
     {
-      sprintf( ErrorMsg, "~Output~%.50s~:~Defuzzification~%.50s~NotAllowed~", GetOutputType(), op_defuz );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Output~%.50s~:~Defuzzification~%.50s~NotAllowed~", GetOutputType(), op_defuz );
       throw std::runtime_error( ErrorMsg );
     }
 }
@@ -164,7 +165,7 @@ void OUT_CRISP::SetOpDefuz( const char *op_defuz )
     }
   else
     {
-      sprintf( ErrorMsg, "~Output~%.50s~:~Defuzzification~%.50s~NotAllowed~", GetOutputType(), op_defuz ); 
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Output~%.50s~:~Defuzzification~%.50s~NotAllowed~", GetOutputType(), op_defuz );
       throw std::runtime_error( ErrorMsg );
     }
 }
@@ -173,8 +174,9 @@ void FISOUT::SetOpDisj( const char *op_disj )
   //*****************************************
 {
   if (Disj != NULL) delete [] Disj;
-  Disj = new char[strlen(op_disj)+1];
-  sprintf( Disj, "%s", op_disj );
+  int len = strlen(op_disj)+1;
+  Disj = new char[len];
+  snprintf(Disj, len, "%s", op_disj );
 
   if(Ag!=NULL) delete Ag;
   Ag = NULL;
@@ -202,7 +204,7 @@ void OUT_FUZZY::SetOpDisj( const char *op_disj ) //throw( std::runtime_error )
 	}
   else
     {
-      sprintf( ErrorMsg, "~Output~%.50s~:~Disjunction~%.50s~NotAllowed~", GetOutputType(), op_disj );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Output~%.50s~:~Disjunction~%.50s~NotAllowed~", GetOutputType(), op_disj );
       throw std::runtime_error( ErrorMsg );
     }
 }
@@ -220,7 +222,7 @@ void OUT_CRISP::SetOpDisj( const char *op_disj ) //throw( std::runtime_error )
     }
   else
     {
-      sprintf( ErrorMsg, "~Output~%.50s~:~Disjunction~%.50s~NotAllowed~", GetOutputType(), op_disj );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Output~%.50s~:~Disjunction~%.50s~NotAllowed~", GetOutputType(), op_disj );
       throw std::runtime_error( ErrorMsg );
     }
 }
@@ -309,7 +311,7 @@ void FISOUT::InitPossibles(RULE ** r, int nr, int nb)
 	  }
       if(j == NbPossibles) 
 	{
-	  sprintf( ErrorMsg, "~ErrorInInitPossibles~\n~Output~: %50s\n", Name);
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInInitPossibles~\n~Output~: %50s\n", Name);
 	  throw std::runtime_error( ErrorMsg );
 	}
     }
@@ -411,7 +413,7 @@ void OUT_FUZZY::OutCoverage(void)
   if(strcmp(Fp[0]->GetType(), MFTRAPINF::Type()) ||
      strcmp(Fp[Nmf-1]->GetType(), MFTRAPSUP::Type()) )
     {
-      sprintf(ErrorMsg, "~ErrorInOutCoverage~~InOutput~%50s\n~PartitionEndShouldBeSemitrapezoidalShaped~", Name);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInOutCoverage~~InOutput~%50s\n~PartitionEndShouldBeSemitrapezoidalShaped~", Name);
       throw std::runtime_error( ErrorMsg );
     }
   p = new double [3];
@@ -422,7 +424,7 @@ void OUT_FUZZY::OutCoverage(void)
 
   if(ValInf > p[1] || ValSup < pe[1])
     {
-      sprintf(ErrorMsg, "~ErrorInOutCoverage~~InOutput~%50s\n~UnreachableTarget~,~BothValinfAndValsupMustBelongToTheKernels", Name);
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInOutCoverage~~InOutput~%50s\n~UnreachableTarget~,~BothValinfAndValsupMustBelongToTheKernels", Name);
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -662,7 +664,7 @@ int OUT_FUZZY::Sfp2Qsp(int *& s)
       // MFs names
       if (i<1000)
 	{
-	  sprintf(nameMF,"MF%d",i+1);
+	  snprintf(nameMF, 15, "MF%d", i+1);
 	  Fp[i]->SetName(nameMF);
 	}
       else

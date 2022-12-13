@@ -262,7 +262,7 @@ MFDPOSS * IMPLIGD::ComputeDposs(MF * A, double degre)
       return tmpdposs;
     }
   // other cases: non allowed MFs
-  sprintf( ErrorMsg, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
+  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
 	   "~InOutputPartitionsWithImplicativeRules");
 
   throw std::runtime_error( ErrorMsg );
@@ -380,7 +380,7 @@ MFDPOSS* IMPLIRG::ComputeDposs(MF *A, double degre)
       return tmpdposs;
     }
   
-  sprintf( ErrorMsg, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
+  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
 	   "~InOutputPartitionsWithImplicativeRules");
 	   throw std::runtime_error( ErrorMsg );
 }
@@ -464,7 +464,7 @@ if(strcmp(A->GetType(),"SemiTrapezoidalInf") == 0)
   
 
   // other input MFs not allowed
-  sprintf( ErrorMsg, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
+  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~OnlyTriangularOrTrapezoidalShapesOrDoorsOrUniversalMFsAreManaged%s",
 	   "~InOutputPartitionsWithImplicativeRules");
   throw std::runtime_error( ErrorMsg );
 

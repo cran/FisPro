@@ -700,8 +700,8 @@ class FISIN
       int i;
       char StrActive[4];
 
-      if(active) sprintf(StrActive, "yes");
-      else sprintf(StrActive, "no");
+      if(active) snprintf(StrActive, 4, "yes");
+      else snprintf(StrActive, 4, "no");
 
       fprintf(f, "Active=%c%s%c\n", STRING_SEP, StrActive, STRING_SEP);
       fprintf(f, "Name=%c%s%c\n", STRING_SEP, Name, STRING_SEP);
@@ -733,8 +733,10 @@ class FISIN
     }
 
     //Decompose input partition
+#ifndef R_PACKAGE
   void DecomposePart(FILE *display);
   void DecomposePart(std::list<double> *dL);
+#endif // R_PACKAGE
 
   // Find the intervals of the partition which intersect
   // the alpha-cut door, fill the arrays of bounds
@@ -1192,8 +1194,8 @@ class FISOUT : public FISIN
     {
       char ChaineClassif[4];
       int i;
-      if(Classif) sprintf(ChaineClassif, "yes");
-      else sprintf(ChaineClassif, "no");
+      if(Classif) snprintf(ChaineClassif, 4, "yes");
+      else snprintf(ChaineClassif, 4, "no");
 
       FISIN::Print(f);
       fprintf(f, "\nOutput %s   Defuzzification : %s Classification : %s\n",
@@ -1225,8 +1227,8 @@ class FISOUT : public FISIN
   virtual void PrintCfg(int num, FILE * f, const char *fd = FORMAT_DOUBLE) const
     {
       char ChaineClassif[4];
-      if(Classif) sprintf(ChaineClassif, "yes");
-      else sprintf(ChaineClassif, "no");
+      if(Classif) snprintf(ChaineClassif, 4, "yes");
+      else snprintf(ChaineClassif, 4, "no");
 
       FISIN::PrintCfgTag(num, f);
       fprintf(f, "Nature=%c%s%c\n", STRING_SEP, GetOutputType(), STRING_SEP);
@@ -1258,7 +1260,7 @@ class OUT_CRISP : public FISOUT
       FISOUT::Init( f, bufsize, num, OpDefuz, OpDisj, ccl, VDef );
       if( Nmf != 0 )
 	{
-	  sprintf( ErrorMsg, "~Output~%d~:~NoMfAllowedForCrispOutput~\n", num);
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~Output~%d~:~NoMfAllowedForCrispOutput~\n", num);
 	  throw std::runtime_error( ErrorMsg );
 	}
     }
@@ -1324,7 +1326,7 @@ class OUT_FUZZY : public FISOUT
       FISOUT::Init( f, bufsize, num, OpDefuz, OpDisj, ccl, VDef );
       if( Nmf == 0 )
         {
-        sprintf( ErrorMsg, "~ErrorInFISFile~\n~Output~: %-3d\n~NumberOfMFInOutput~ = 0", num );
+        snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~Output~: %-3d\n~NumberOfMFInOutput~ = 0", num );
         throw std::runtime_error( ErrorMsg );
         }
       if(Cover && Nmf > 1 && !(strcmp(Fp[0]->GetType(), MFTRAPINF::Type())) &&
@@ -1646,7 +1648,7 @@ class RULE
     if(ew > EPSILON) ExpertWeight = ew; 
     else
       {
-	sprintf( ErrorMsg, "~ExpertWeight~MustBePositive~: %f\n", ew);
+	snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ExpertWeight~MustBePositive~: %f\n", ew);
 	throw std::runtime_error( ErrorMsg );
       }
   }
@@ -2212,7 +2214,9 @@ class FIS
   int Perf(int NumS, double ** Data, int NbEx, int NPart, double *&ResultTab,  double *&Couvert, double *&MaxErr, double *&NItem, double MuSeuil, int ErrorType, double *BreakPoints, int * MisClassified, double * Lab, int ref, FILE * f, FILE *display);
 
   // FATI Inference for implicative rules and fuzzy inputs
+#ifndef R_PACKAGE
   void InferFatiPrep(int nout);
+#endif // R_PACKAGE
   void KinkPoints(std::list<double> ** dl, int nout);
   void UpdatePartList(int iout, std::list<double> **dL, double mposs, int m1, int m2);
 

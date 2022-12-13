@@ -80,6 +80,7 @@ using namespace std;
 #define DBL_SUP_EQUAL(x, y) (((y) - (x)) < EPSILON)
 
 //! To handle error messages
+#define ERROR_MSG_SIZE 300
 extern char ErrorMsg[];
 
 //! To handle variable names

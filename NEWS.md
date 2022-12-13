@@ -1,3 +1,7 @@
+# FisPro 1.1.2
+
+* Fix CRAN check compiled code issues
+
 # FisPro 1.1.1
 
 * Fix compilation warnings

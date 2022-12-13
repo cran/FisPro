@@ -30,7 +30,7 @@ RULE::RULE(int nI, FISIN ** E, int nO, FISOUT ** S, char * cConj, char * Val) //
 
   if((strlen(Val) == 0) ||  (Val[0] == 0x0D))
     {
-      sprintf( ErrorMsg, "~EmptyStringInRuleConstructor~\n");
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~EmptyStringInRuleConstructor~\n");
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -40,7 +40,7 @@ RULE::RULE(int nI, FISIN ** E, int nO, FISOUT ** S, char * cConj, char * Val) //
     }
   catch( std::exception &e )
     {
-      sprintf( ErrorMsg, "~ErrorInFISFile~\n%.100s", e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n%.100s", e.what() );
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -51,14 +51,14 @@ RULE::RULE(int nI, FISIN ** E, int nO, FISOUT ** S, char * cConj, char * Val) //
   catch( std::exception &e )
     {
       delete [] Tab;
-      sprintf( ErrorMsg, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s\n%.50s~", Val, e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s\n%.50s~", Val, e.what() );
       throw std::runtime_error( ErrorMsg );
     }
 
   if(ret < nI + nO)
     {
       delete [] Tab;
-      sprintf( ErrorMsg, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s~", Val );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s~", Val );
       throw std::runtime_error( ErrorMsg );
     }
 
@@ -73,7 +73,7 @@ RULE::RULE(int nI, FISIN ** E, int nO, FISOUT ** S, char * cConj, char * Val) //
   catch( std::exception &e )
     {
       delete [] Tab;
-      sprintf( ErrorMsg, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s\n%.100s", Val, e.what() );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~ErrorInFISFile~\n~ErrorInRuleValues~: %.50s\n%.100s", Val, e.what() );
       throw std::runtime_error( ErrorMsg );
     }
 } 
@@ -121,7 +121,7 @@ void RULE::SetPremise( int nI, FISIN ** E, char * cConj )
     temp = new PREMISE_LUKA(nI, E);
   else
     {
-      sprintf( ErrorMsg, "~UnknownConjunction~: %.50s~", cConj );
+      snprintf(ErrorMsg, ERROR_MSG_SIZE, "~UnknownConjunction~: %.50s~", cConj );
       throw std::runtime_error( ErrorMsg );
     }
 
