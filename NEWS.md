@@ -1,3 +1,7 @@
+# FisPro 1.1.3
+
+* Fix M1mac deprecated-declarations warnings
+
 # FisPro 1.1.2
 
 * Fix CRAN check compiled code issues

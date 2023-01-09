@@ -1226,12 +1226,12 @@ class MFDPOSS:public MF
       f = fopen(fic, "rt");
       if(f == NULL)
 	{
-	  sprintf( ErrorMsg, "~CannotOpenFISFile~: %.100s~", fic);
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~CannotOpenFISFile~: %.100s~", fic);
 	  throw std::runtime_error( ErrorMsg );
 	}
       if(fgets(string, 30, f) == NULL) // check the first line
 	{
-	  sprintf( ErrorMsg, "~FirstLineEmptyInFile~: %.100s~", fic);
+	  snprintf(ErrorMsg, ERROR_MSG_SIZE, "~FirstLineEmptyInFile~: %.100s~", fic);
 	  throw std::runtime_error( ErrorMsg );
 	}
 
