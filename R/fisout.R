@@ -121,8 +121,8 @@ NewFisOutCrisp <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_FisOutCrisp <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_FisOutCrisp <- function(target, current, ...) {
+  return(target$equals(current))
 }
 
 ###############################################################################
@@ -246,6 +246,6 @@ NewFisOutFuzzy <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_FisOutFuzzy <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_FisOutFuzzy <- function(target, current, ...) {
+  return(target$equals(current))
 }

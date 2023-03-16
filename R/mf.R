@@ -109,8 +109,8 @@ NewMfTriangular <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_MfTriangular <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_MfTriangular <- function(target, current, ...) {
+  return(target$equals(current))
 }
 
 #' @description Overload of [toString] method
@@ -164,8 +164,8 @@ NewMfTrapezoidalInf <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_MfTrapezoidalInf <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_MfTrapezoidalInf <- function(target, current, ...) {
+  return(target$equals(current))
 }
 
 #' @description Overload of [toString] method
@@ -219,8 +219,8 @@ NewMfTrapezoidalSup <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_MfTrapezoidalSup <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_MfTrapezoidalSup <- function(target, current, ...) {
+  return(target$equals(current))
 }
 
 #' @description Overload of [toString] method
@@ -276,8 +276,8 @@ NewMfTrapezoidal <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_MfTrapezoidal <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_MfTrapezoidal <- function(target, current, ...) {
+  return(target$equals(current))
 }
 
 #' @description Overload of [toString] method

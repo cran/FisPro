@@ -156,6 +156,6 @@ NewFisIn <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_FisIn <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_FisIn <- function(target, current, ...) {
+  return(target$equals(current))
 }

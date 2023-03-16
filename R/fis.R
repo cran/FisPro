@@ -238,6 +238,6 @@ NewFis <- function(...) {
 #' @description Overload of [all.equal] method
 #' @noRd
 #' @export
-all.equal.Rcpp_Fis <- function(x, y) {
-  return(x$equals(y))
+all.equal.Rcpp_Fis <- function(target, current, ...) {
+  return(target$equals(current))
 }
